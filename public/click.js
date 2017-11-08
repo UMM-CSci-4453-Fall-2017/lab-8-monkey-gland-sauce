@@ -9,6 +9,7 @@ function ButtonCtrl($scope,buttonApi){
    $scope.isLoading=isLoading;
    $scope.refreshButtons=refreshButtons;
    $scope.buttonClick=buttonClick;
+   $scope.voidClick=voidClick;
 
    var loading = false;
 
@@ -30,12 +31,22 @@ function ButtonCtrl($scope,buttonApi){
  }
   function buttonClick($event){
      $scope.errorMessage='';
-     buttonApi.clickButton($event.target.id)
+     //console.log($event.target.id);
+     buttonApi.clickButton(event.target.id)
         .success(function(){})
         .error(function(){$scope.errorMessage="Unable click";});
   }
-  refreshButtons();  //make sure the buttons are loaded
 
+  function voidClick($event) {
+    console.log("should be here");
+    $scope.errorMessage='';
+    //console.log($event.target.id);
+    buttonApi.voidButton()
+       .success(function(){})
+       .error(function(){$scope.errorMessage="Unable to void this transaction";});
+  }
+
+  refreshButtons();  //make sure the buttons are loaded
 }
 
 function buttonApi($http,apiUrl){
@@ -46,9 +57,13 @@ function buttonApi($http,apiUrl){
     },
     clickButton: function(id){
       var url = apiUrl+'/click?id='+id;
-//      console.log("Attempting with "+url);
-      return $http.get(url); // Easy enough to do this way
+      console.log("Attempting with "+url);
+      return $http.post(url); // Easy enough to do this way
+    },
+    voidButton: function(){
+      var url = apiUrl + '/void';
+      console.log("Attempting with "+url);
+      return $http.post(url);
     }
  };
 }
-
