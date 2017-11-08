@@ -15,11 +15,20 @@
          <div style="position:absolute;left:{{button.left}}px;top:{{button.top}}px"><button id="{{button.button_id}}" ng-click="buttonClick($event,'button.button_id');" >{{button.label}}</button></div>
        </div>
        <div style="position:absolute;left:100px;top:500px"><button id="void" ng-click="voidClick($event);" >Void Transaction</button></div>
+       <!-- <div style="position:fixed;height:50px;bottom:100px;left:0px;right:0px;margin-bottom:0px"} >
+         <p>{{currentUser}}</p>
+      </div> -->
+      <table style = "position:absolute;right:0px;top:100px" >
+        <tr ng-repeat="item in list">
+          <td><button id="{{item.id}}" ng-click="deleteItem($event,'item.id');" >Item's Name: {{item.name}}              Item's Amount: {{item.amount}}        Item's Cost: {{item.cost}}</button></td>
+        </tr>
+      </div>
        <div style="position:fixed;height:50px;bottom:0px;left:0px;right:0px;margin-bottom:0px"} ng-show="errorMessage != ''">
           <div class="col-sm-12">
            <h3 class="text-danger">{{errorMessage}}</h3>
          </div>
        </div>
+
      </div>
 </div>
 </body>
