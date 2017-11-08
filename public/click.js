@@ -29,6 +29,7 @@
            refreshList();
          })
          .error(function(){$scope.errorMessage="Unable click";});
+           refreshList();
     }
 
     function refreshButtons(){
@@ -87,10 +88,12 @@
       $scope.errorMessage='';
       buttonApi.voidButton()
          .success(function(){
+           refreshList();
          })
-         .error(function(){$scope.errorMessage="Unable to void this transaction";});
+         .error(function(){
+           $scope.errorMessage="Unable to void this transaction";
+         });
       refreshList();
-      getTotalAmt();
     }
 
     refreshButtons();
