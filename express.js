@@ -12,54 +12,26 @@ var list = [];
 var databases = [];
 var totalAmt = [];
 
-var getButtonsInfo = function(dbf){
-  var sql = "SELECT * FROM " + credentials.user + ".till_buttons";
+var queryDatabase = function(dbf, sql){
   queryResults = dbf.query(mysql.format(sql));
   return(queryResults);
 }
 
-var fillInButtonsArray = function(result){
+var fillInArray = function(result){
   buttons = result;
   return(buttons);
 }
 
-var getTransactionData = function(dbf){
-  var sql = "SELECT * FROM " + credentials.user + ".transaction";
-  queryResults = dbf.query(mysql.format(sql));
-  return(queryResults);
-}
-
-var getTransactionAmount = function(dbf, sql){
-  queryResults = dbf.query(mysql.format(sql));
-  return(queryResults);
-}
-
-var fillIntotalAmt = function(result){
-  totalAmt = result;
-  return(totalAmt);
-}
-
-var fillInList = function(result){
-  list = result;
-  return(list);
-}
-
-var insertIntoTransaction = function(dbf, sql){
+var sendToDatabase = function(dbf, sql){
   dbf.query(mysql.format(sql));
 }
 
-var truncateTable = function(dbf, sql){
-  dbf.query(mysql.format(sql));
-}
-
-var getCurrentUser = function(){
-  return(credentials.user);
-}
 
 app.use(express.static(__dirname + '/public')); //Serves the web pages
 app.get("/buttons",function(req,res){
-  var query = getButtonsInfo(dbf)
-  .then(fillInButtonsArray)
+  var sql = "SELECT * FROM " + credentials.user + ".till_buttons";
+  var query = queryDatabase(dbf, sql)
+  .then(fillInArray)
   .then(function (buttons) {
     res.send(buttons);})
   .catch(function(err){console.log("DANGER:",err)});
@@ -67,21 +39,18 @@ app.get("/buttons",function(req,res){
 
 app.post("/void",function(req,res){
   var sql = "TRUNCATE TABLE " + credentials.user + ".transaction";
-  var query = truncateTable(dbf, sql);
+  var query = sendToDatabase(dbf, sql);
+  res.send();
 });
 
 app.get("/list",function(req,res){
-  var query = getTransactionData(dbf)
-  .then(fillInList)
+  var sql = "SELECT * FROM " + credentials.user + ".transaction";
+  var query = queryDatabase(dbf, sql)
+  .then(fillInArray)
   .then(function (list) {
     res.send(list);})
   .catch(function(err){console.log("DANGER:",err)});
 });
-
-// app.get("/user", function(req, res){
-//   console.log("helloo");
-//   res.send(credentials.user);
-// });
 
 app.post("/click",function(req,res){
   var id = req.param('id');
@@ -102,20 +71,21 @@ app.post("/click",function(req,res){
     sql = 'insert into ' + credentials.user + '.transaction values (4, "tabasco", 1, 1.25) ' +
     'on duplicate key update amount = amount + 1, cost = cost + 1.25';
   }
-  var query = insertIntoTransaction(dbf, sql);
-  //.catch(function(err){console.log("DANGER:",err)});
+  var query = sendToDatabase(dbf, sql);
+  res.send();
 });
 
 app.post("/delete", function(req,res){
   var id = req.param('id');
   var sql = 'DELETE FROM ' + credentials.user + '.transaction where id = ' + id;
-  var query = insertIntoTransaction(dbf, sql);
+  var query = sendToDatabase(dbf, sql);
+  res.send();
 });
 
 app.get("/total", function(req, res){
   var sql = 'SELECT SUM(cost) AS TOTAL FROM ' + credentials.user + '.transaction';
-  var query = getTransactionAmount(dbf, sql)
-  .then(fillIntotalAmt)
+  var query = queryDatabase(dbf, sql)
+  .then(fillInArray)
   .then(function (totalAmt) {
     res.send(totalAmt);})
   .catch(function(err){console.log("DANGER:",err)});

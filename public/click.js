@@ -23,7 +23,6 @@
 
     function deleteItem($event){
       $scope.errorMessage='';
-      //console.log($event.target.id);
       buttonApi.deleteItem(event.target.id)
          .success(function(){
            refreshList();

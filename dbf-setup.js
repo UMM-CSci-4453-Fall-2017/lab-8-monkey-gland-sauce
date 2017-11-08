@@ -28,5 +28,9 @@ var endPool=function(){
    pool.end(function(err){});
 }
 
+var endConnection=function(){
+  connection.end();
+}
+
 exports.query = query;
 exports.releaseDBF=endPool;
