@@ -10,6 +10,7 @@ port = process.env.PORT || 1337;
 var buttons = [];
 var list = [];
 var databases = [];
+var totalAmt = [];
 
 var getButtonsInfo = function(dbf){
   var sql = "SELECT * FROM " + credentials.user + ".till_buttons";
@@ -26,6 +27,16 @@ var getTransactionData = function(dbf){
   var sql = "SELECT * FROM " + credentials.user + ".transaction";
   queryResults = dbf.query(mysql.format(sql));
   return(queryResults);
+}
+
+var getTransactionAmount = function(dbf, sql){
+  queryResults = dbf.query(mysql.format(sql));
+  return(queryResults);
+}
+
+var fillIntotalAmt = function(result){
+  totalAmt = result;
+  return(totalAmt);
 }
 
 var fillInList = function(result){
@@ -100,5 +111,14 @@ app.post("/delete", function(req,res){
   var sql = 'DELETE FROM ' + credentials.user + '.transaction where id = ' + id;
   var query = insertIntoTransaction(dbf, sql);
 });
+
+app.get("/total", function(req, res){
+  var sql = 'SELECT SUM(cost) AS TOTAL FROM ' + credentials.user + '.transaction';
+  var query = getTransactionAmount(dbf, sql)
+  .then(fillIntotalAmt)
+  .then(function (totalAmt) {
+    res.send(totalAmt);})
+  .catch(function(err){console.log("DANGER:",err)});
+})
 
 app.listen(port);

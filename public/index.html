@@ -5,23 +5,23 @@
     <title>Cash Register</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.4/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="click.js"></script>
 </head>
-<body ng-app="buttons">
+<body ng-app="buttons" ng-controller="buttonCtrl">
 <div class="container-fluid">
-    <h1>Cash Register (with buttons)</h1>
-    <div id="buttons" ng-controller="buttonCtrl" >
+    <h1>Cash Register (with buttons.... and angst)</h1>
+    <div id="buttons">
        <div ng-repeat="button in buttons">
          <div style="position:absolute;left:{{button.left}}px;top:{{button.top}}px"><button id="{{button.button_id}}" ng-click="buttonClick($event,'button.button_id');" >{{button.label}}</button></div>
        </div>
-       <div style="position:absolute;left:100px;top:500px"><button id="void" ng-click="voidClick($event);" >Void Transaction</button></div>
-       <!-- <div style="position:fixed;height:50px;bottom:100px;left:0px;right:0px;margin-bottom:0px"} >
-         <p>{{currentUser}}</p>
-      </div> -->
       <table style = "position:absolute;right:0px;top:100px" >
         <tr ng-repeat="item in list">
-          <td><button id="{{item.id}}" ng-click="deleteItem($event,'item.id');" >Item's Name: {{item.name}}              Item's Amount: {{item.amount}}        Item's Cost: {{item.cost}}</button></td>
+          <td><button id="{{item.id}}"class="btn btn-primary"style ="width: 500px;font-size:15px"ng-click="deleteItem($event,'item.id');" >Item's Name: {{item.name}} Item's Amount: {{item.amount}} Item's Cost: {{item.cost}}</button></td>
         </tr>
+        <tr><div style="position:absolute;right:0px;bottom:500px"><button id="void" style="width:500px;font-size:30px" class="btn btn-danger" ng-click="voidClick($event);">Void Transaction</button></div></tr>
+        <tr><button id="totalAmount"style="position:fixed;height:50px;bottom:450px;right:0px;width:500px;font-size:30px"class="btn btn-success">Total: {{amount}}</button></tr>
       </div>
        <div style="position:fixed;height:50px;bottom:0px;left:0px;right:0px;margin-bottom:0px"} ng-show="errorMessage != ''">
           <div class="col-sm-12">
