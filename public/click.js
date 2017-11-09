@@ -111,35 +111,36 @@
 
     function buttonApi($http,apiUrl){
       return{
+        //getting the buttons coordinates from till_buttons
         getButtons: function(){
           var url = apiUrl + '/buttons';
           return $http.get(url);
         },
+        //insert into the transaction table with the specified id
         clickButton: function(id){
           var url = apiUrl+'/click?id='+id;
           console.log("Attempting with "+url);
           return $http.post(url);
         },
+        //remove all transaction data
         voidButton: function(){
           var url = apiUrl + '/void';
           console.log("Attempting with "+url);
           return $http.post(url);
         },
+        //querying the database for the transaction table
         getList: function(){
           var url = apiUrl + '/list';
           console.log("Attempting with " + url);
           return $http.get(url);
         },
-        getUser: function(){
-          var url = apiUrl + '/user';
-          console.log("Attempting with " + url);
-          return $http.get(url);
-        },
+        //deleting the specified record with the coresponding id
         deleteItem: function(id){
           var url = apiUrl+'/delete?id='+id;
           console.log("Attempting with "+url);
           return $http.post(url);
         },
+        //Summing up the total cost of the transaction
         totalAmount: function(){
           var url = apiUrl + '/total';
           console.log("Attempting with "+url);
