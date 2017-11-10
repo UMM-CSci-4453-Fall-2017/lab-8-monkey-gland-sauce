@@ -14,11 +14,21 @@
        $scope.refreshList=refreshList;
        $scope.buttonClick=buttonClick;
        $scope.voidClick=voidClick;
+       $scope.loginClick=loginClick;
 
        var loading = false;
 
        function isLoading(){
         return loading;
+       }
+
+       function loginClick($event) {
+         $scope.errorMessage='';
+         buttonApi.loginCheck($scope.username, $scope.password)
+            .success(function(){
+              refreshList();
+            })
+            .error(function(){$scope.errorMessage="Unable click";});
        }
 
        //When user select one of the items in the transaction table,
@@ -31,7 +41,6 @@
              refreshList();
            })
            .error(function(){$scope.errorMessage="Unable click";});
-             refreshList();
       }
 
       //This function is repsonsible for getting the coordinates as well as
@@ -61,7 +70,6 @@
             $scope.list=data;
             getTotalAmt();
             loading=false;
-            console.log("peanut butter jelly time!")
          })
          .error(function () {
              $scope.errorMessage="Unable to load Buttons:  Database request failed";
@@ -136,13 +144,18 @@
         },
         //deleting the specified record with the coresponding id
         deleteItem: function(id){
-          var url = apiUrl+'/delete?id='+id;
+          var url = apiUrl + '/delete?id=' + id;
           console.log("Attempting with "+url);
           return $http.post(url);
         },
         //Summing up the total cost of the transaction
         totalAmount: function(){
           var url = apiUrl + '/total';
+          console.log("Attempting with "+url);
+          return $http.get(url);
+        },
+        loginCheck: function(username, password){
+          var url = apiUrl + '/login?usern=' + username + '&pw=' + password;
           console.log("Attempting with "+url);
           return $http.get(url);
         }

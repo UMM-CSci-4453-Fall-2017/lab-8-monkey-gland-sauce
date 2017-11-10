@@ -11,6 +11,7 @@ port = process.env.PORT || 1337;
 var buttons = [];
 var list = [];
 var totalAmt = [];
+var loginInfo = [];
 
 //Method to query the database and returns the rows
 var queryDatabase = function(dbf, sql){
@@ -89,6 +90,19 @@ app.get("/total", function(req, res){
   .then(function (totalAmt) {
     res.send(totalAmt);})
   .catch(function(err){console.log("DANGER:",err)});
-})
+});
+
+app.get("/login", function(req, res){
+  var usern = req.param('usern');
+  var passw = req.param('pw');
+  var sql = 'SELECT password = "' + passw + '" from ' + credentials.user + '.User where username = "' + usern + '";'
+  var query = queryDatabase(dbf, sql)
+  .then(fillInArray(loginInfo))
+  .then(function (loginInfo){
+    res.send(loginInfo);})
+  .catch(function(err){console.log("DANGER:",err)});
+  console.log(sql);
+  console.log(loginInfo);
+});
 
 app.listen(port);
