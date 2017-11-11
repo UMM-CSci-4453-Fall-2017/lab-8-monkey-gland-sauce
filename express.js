@@ -95,14 +95,12 @@ app.get("/total", function(req, res){
 app.get("/login", function(req, res){
   var usern = req.param('usern');
   var passw = req.param('pw');
-  var sql = 'SELECT password = "' + passw + '" from ' + credentials.user + '.User where username = "' + usern + '";'
+  var sql = 'SELECT password = "' + passw + '" AS CORRECT FROM ' + credentials.user + '.User WHERE username = "' + usern + '";'
   var query = queryDatabase(dbf, sql)
   .then(fillInArray(loginInfo))
   .then(function (loginInfo){
     res.send(loginInfo);})
   .catch(function(err){console.log("DANGER:",err)});
-  console.log(sql);
-  console.log(loginInfo);
 });
 
 app.listen(port);

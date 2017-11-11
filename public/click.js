@@ -15,6 +15,7 @@
        $scope.buttonClick=buttonClick;
        $scope.voidClick=voidClick;
        $scope.loginClick=loginClick;
+       $scope.logOutClick=logOutClick;
 
        var loading = false;
 
@@ -22,11 +23,21 @@
         return loading;
        }
 
+       function logOutClick($event) {
+         $scope.bool = false;
+         voidClick();
+         refreshList();
+       }
+
        function loginClick($event) {
          $scope.errorMessage='';
          buttonApi.loginCheck($scope.username, $scope.password)
-            .success(function(){
-              refreshList();
+            .success(function(data){
+              if (data[0].CORRECT == 1){
+                $scope.bool = true;
+              } else {
+                $scope.bool = false;
+              }
             })
             .error(function(){$scope.errorMessage="Unable click";});
        }

@@ -9,18 +9,38 @@
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
       <script src="click.js"></script>
   </head>
+
   <body ng-app="buttons" ng-controller="buttonCtrl">
-  <div style="position:absolute;width:300px;height:500px;top:50%;left:50%;margin: -100px 0 0 -150px" ng-hide="login">
-    <label for="fname">Username: </label>
+  <form style="position:absolute;width:300px;height:500px;top:50%;left:50%;margin: -100px 0 0 -150px" ng-hide="login=bool">
+    <label for="fname">
+      Username:
+    </label>
     <input type="text" id="fname" placeholder="Your username.." ng-model="username">
     <br><br>
-    <label for="lname">Password</label>
-    <input type="password" id="lname" placeholder="Your password" ng-model="password">
+    <label for="lname">
+      Password
+    </label>
+    <input type="password" id="lname" placeholder="Your password.." ng-model="password">
     <br><br>
-    <button id="loginButton" class="btn btn-success" ng-click="login=true;loginClick($event, username, password);"> Log-In </button>
-  </div>
-  <div class="container-fluid" ng-show="login">
+    <button id="loginButton" class="btn btn-success" ng-click="loginClick($event, username, password);">
+      Log-In
+    </button>
+    <br><br>
+    <button id="failedLogin" class="btn btn-danger" ng-show="bool==false" type="reset">
+      <strong>
+        Failed Login
+      </strong>
+    </button>
+  </form>
+
+  <div class="container-fluid" ng-show="login=bool">
       <h1>Cash Register</h1>
+      <h3> User {{username}} is currently logged in
+        <button id="logOut" class="btn btn-default" ng-click="logOutClick($event)">
+          Log-out
+        </button>
+      </h3>
+
       <div id="buttons">
          <div ng-repeat="button in buttons">
            <div style="position:absolute;left:{{button.left}}px;top:{{button.top}}px">
@@ -37,20 +57,23 @@
           <tr ng-repeat="item in list" style="top:100px">
             <td>
               <button id="{{item.id}}"class="btn btn-primary"style ="height:50px;width:500px;font-size:15px"ng-click="deleteItem($event,'item.id');">
-                <span style="margin-right:10px" class="glyphicon glyphicon-tags"></span>Item's Name: {{item.name}} Item's Amount: {{item.amount}} Item's Cost: {{item.cost}}
+                <span style="margin-right:10px" class="glyphicon glyphicon-tags"></span>
+                Item's Name: {{item.name}} Item's Amount: {{item.amount}} Item's Cost: {{item.cost}}
               </button>
             </td>
           </tr>
           <tr>
             <div style="position:absolute;right:0px;bottom:500px">
             <button id="void" style="width:500px;font-size:30px" class="btn btn-danger" ng-click="voidClick($event);">
-              <span class="glyphicon glyphicon-trash"></span> Void Transaction
+              <span class="glyphicon glyphicon-trash"></span>
+              Void Transaction
             </button>
             </div>
           </tr>
           <tr>
             <button id="totalAmount"style="position:fixed;height:50px;bottom:450px;right:0px;width:500px;font-size:30px" class="btn btn-success">
-              <span class="glyphicon glyphicon-shopping-cart"></span> Total: {{amount}}
+              <span class="glyphicon glyphicon-shopping-cart"></span>
+              Total: {{amount}}
             </button>
           </tr>
       </div>
@@ -60,5 +83,6 @@
            </div>
          </div>
     </div>
+
   </body>
   </html>
