@@ -8,6 +8,7 @@
        $scope.list=[];
        $scope.total=[];
        $scope.errorMessage='';
+       $scope.logMessage='';
        $scope.deleteItem=deleteItem;
        $scope.isLoading=isLoading;
        $scope.refreshButtons=refreshButtons;
@@ -25,6 +26,7 @@
 
        function logOutClick($event) {
          $scope.bool = false;
+         $scope.logMessage = 'User logged-out';
          voidClick();
          refreshList();
        }
@@ -37,6 +39,7 @@
                 $scope.bool = true;
               } else {
                 $scope.bool = false;
+                $scope.logMessage = 'Wrong Username/Password';
               }
             })
             .error(function(){$scope.errorMessage="Unable click";});
@@ -92,7 +95,8 @@
     //once completed, it will update the transaction data
       function buttonClick($event){
          $scope.errorMessage='';
-         buttonApi.clickButton(event.target.id)
+         var dt = new Date().toISOString().slice(0,19).replace('T', ' ');
+         buttonApi.clickButton(event.target.id, dt)
             .success(function(){
               refreshList();
             })
@@ -136,8 +140,8 @@
           return $http.get(url);
         },
         //insert into the transaction table with the specified id
-        clickButton: function(id){
-          var url = apiUrl+'/click?id='+id;
+        clickButton: function(id, utcDate){
+          var url = apiUrl+'/click?id='+ id + '&time=' + utcDate;
           console.log("Attempting with "+url);
           return $http.post(url);
         },
